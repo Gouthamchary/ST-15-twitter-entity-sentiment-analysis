@@ -1,13 +1,14 @@
-from flask import Flask, render_template, request
+from flask import Flask,render_template,request,jsonify
 from test import TextToNum
 import pickle
+
 app=Flask(__name__)
 
 @app.route("/")
 def index():
     return render_template("index.html")
 
-@app.route("/predict",methods=["GET", "POST"])
+@app.route("/predict",methods=['POST','GET'])
 def predict():
     if request.method=="POST":
         msg=request.form.get("message")
@@ -26,11 +27,20 @@ def predict():
         
         with open("model.pickle","rb") as mc:
             model=pickle.load(mc)
+
         pred=model.predict(vcdata)
         print(pred)
-    else:
-        pred="No Prediction"
-    #return render_template("predict.html")
+        sentiment_map = {1: "Positive 😊", 0: "Neutral 😐", -1: "Negative 😢"}
+        sentiment = sentiment_map.get(pred[0], "Unknown")
 
-if __name__=="__main__":
-    app.run(host="0.0.0.0" , port=5050)
+        return render_template("result.html",sentiment=sentiment)
+       
+
+
+
+    else:
+        return render_template("predict.html")
+
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0",port='5050')

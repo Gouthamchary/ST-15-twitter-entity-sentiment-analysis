@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sentiment Result Display</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 99%, #fad0c4 100%);
+      font-family: 'Arial', sans-serif;
+      color: white;
+    }
+
+    .result-container {
+      text-align: center;
+      padding: 40px;
+      border-radius: 20px;
+      background: rgba(0, 0, 0, 0.2);
+      animation: fadeIn 1.5s ease;
+    }
+
+    .result-text {
+      font-size: 2rem;
+      font-weight: bold;
+      padding: 20px;
+      border-radius: 15px;
+    }
+
+    .positive {
+      background: #28a745;
+    }
+
+    .neutral {
+      background: #ffc107;
+    }
+
+    .negative {
+      background: #dc3545;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <div class="result-container">
+    <div id="result" class="result-text">Loading...</div>
+  </div>
+
+  <script>
+    // Simulated backend result (replace this with dynamic fetch if integrated)
+    const backendResult = 1; // Use your API value like pred[0]
+
+    const resultDiv = document.getElementById('result');
+
+    if (backendResult === 1) {
+      resultDiv.textContent = "Positive Sentiment!";
+      resultDiv.classList.add('positive');
+    } else if (backendResult === 0) {
+      resultDiv.textContent = "Neutral Sentiment.";
+      resultDiv.classList.add('neutral');
+    } else if (backendResult === -1) {
+      resultDiv.textContent = "Negative Sentiment.";
+      resultDiv.classList.add('negative');
+    }
+  </script>
+</body>
+</html>
