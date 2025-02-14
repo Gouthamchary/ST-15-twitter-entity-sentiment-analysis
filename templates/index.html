@@ -3,375 +3,127 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Website</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>Twitter Sentiment Analysis</title>
     <style>
-        /* Reset and Base Styles */
-        * {
+        body {
+            background: linear-gradient(135deg, #1DA1F2, #0d0d0d, #14171A);
+            background-size: 300% 300%;
+            animation: gradientBG 6s infinite alternate;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+            text-align: center;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-            font-family: 'Arial', sans-serif;
-        }
-
-        /* Header Styles */
-        header {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            background: #ffffff;
-            padding: 1rem 2rem;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            z-index: 1000;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #333;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 2rem;
-        }
-
-        .nav-links a {
-            text-decoration: none;
-            color: #333;
-            transition: color 0.3s;
-        }
-
-        .nav-links a:hover,
-        .nav-links a.active {
-            color: #007bff;
-        }
-
-        .menu-toggle {
-            display: none;
-            cursor: pointer;
-        }
-
-        /* Hero Section */
-        .hero {
+            overflow: hidden;
             height: 100vh;
-            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('hero-bg.jpg');
-            background-size: cover;
             display: flex;
             align-items: center;
             justify-content: center;
-            text-align: center;
-            color: white;
-            padding: 0 1rem;
+            position: relative;
         }
-
-        .hero-content h1 {
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
+        }
+        .container {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+        }
+        .animated-title {
             font-size: 3rem;
-            margin-bottom: 1rem;
+            text-shadow: 0 0 10px #1DA1F2, 0 0 20px #1DA1F2;
+            animation: glow 2s infinite alternate;
         }
-
-        .cta-button {
-            padding: 1rem 2rem;
-            background: #007bff;
-            color: white;
+        @keyframes glow {
+            from { text-shadow: 0 0 10px #1DA1F2, 0 0 20px #1DA1F2; }
+            to { text-shadow: 0 0 20px #00ffcc, 0 0 30px #00ffcc; }
+        }
+        .predict-btn {
+            background: linear-gradient(90deg, #ffcc00, #ffaa00);
             border: none;
-            border-radius: 5px;
+            padding: 15px 30px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #0d0d0d;
             cursor: pointer;
-            transition: background 0.3s;
-        }
-
-        .cta-button:hover {
-            background: #0056b3;
-        }
-
-        /* Features Section */
-        .features {
-            padding: 5rem 2rem;
-            background: #f8f9fa;
-        }
-
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .feature-card {
-            background: white;
-            padding: 2rem;
             border-radius: 10px;
-            text-align: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            transition: transform 0.3s;
+            text-transform: uppercase;
+            margin-top: 30px;
+            animation: pulse 1.5s infinite;
+            z-index: 2;
+        }
+        .predict-btn:hover {
+            background: linear-gradient(90deg, #ffaa00, #ffcc00);
+            transform: scale(1.1);
+            transition: all 0.3s ease-in-out;
+        }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 10px #ffcc00; }
+            50% { box-shadow: 0 0 20px #ffaa00; }
+            100% { box-shadow: 0 0 10px #ffcc00; }
         }
 
-        .feature-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .feature-icon {
-            font-size: 2rem;
-            color: #007bff;
-            margin-bottom: 1rem;
-        }
-
-        /* Contact Section */
-        .contact {
-            padding: 5rem 2rem;
-            background: white;
-        }
-
-        .contact-form {
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .form-group input,
-        .form-group textarea {
+        /* Floating Words Animation */
+        .floating-words {
+            position: absolute;
             width: 100%;
-            padding: 0.8rem;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 1rem;
+            height: 100%;
+            bottom: 0;
+            left: 0;
+            overflow: hidden;
+            z-index: 1;
         }
-
-        .form-group textarea {
-            height: 150px;
+        .floating-words span {
+            position: absolute;
+            font-size: 2rem;
+            font-weight: bold;
+            opacity: 0.3;
+            color: rgba(255, 255, 255, 0.5);
+            bottom: 0;
+            animation: floatAnimation 8s linear infinite;
         }
-
-        /* Footer Styles */
-        footer {
-            background: #333;
-            color: white;
-            padding: 2rem;
-            text-align: center;
-        }
-
-        .social-links {
-            margin-bottom: 1rem;
-        }
-
-        .social-links a {
-            color: white;
-            margin: 0 0.5rem;
-            font-size: 1.2rem;
-            transition: color 0.3s;
-        }
-
-        .social-links a:hover {
-            color: #007bff;
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .menu-toggle {
-                display: block;
+        @keyframes floatAnimation {
+            from {
+                transform: translateY(0vh) rotate(0deg);
+                opacity: 0;
             }
-
-            .nav-links {
-                position: fixed;
-                top: 70px;
-                right: -100%;
-                flex-direction: column;
-                background: white;
-                width: 100%;
-                padding: 2rem;
-                transition: right 0.3s;
-                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            to {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 1;
             }
-
-            .nav-links.active {
-                right: 0;
-            }
-
-            .hero-content h1 {
-                font-size: 2rem;
-            }
-        }
-
-        /* Scroll to Top Button */
-        .scroll-top {
-            position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            background: #007bff;
-            color: white;
-            padding: 1rem;
-            border-radius: 50%;
-            cursor: pointer;
-            display: none;
-            transition: background 0.3s;
-        }
-
-        .scroll-top:hover {
-            background: #0056b3;
         }
     </style>
-</head>
-<body>
-    <header>
-        <div class="logo">Your Logo</div>
-        <nav>
-            <div class="menu-toggle">
-                <i class="fas fa-bars"></i>
-            </div>
-            <ul class="nav-links">
-                <li><a href="#home" class="active">Home</a></li>
-                <li><a href="#features">Features</a></li>
-                <li><a href="#contact">Contact</a></li>
-            </ul>
-        </nav>
-    </header>
-
-    <section class="hero" id="home">
-        <div class="hero-content">
-            <h1>Welcome to Our Website</h1>
-            <p>Discover amazing features and services</p>
-            <button class="cta-button">Get Started</button>
-        </div>
-    </section>
-
-    <section class="features" id="features">
-        <div class="features-grid">
-            <div class="feature-card">
-                <i class="fas fa-rocket feature-icon"></i>
-                <h3>Fast Performance</h3>
-                <p>Lightning-fast loading times and smooth interactions.</p>
-            </div>
-            <div class="feature-card">
-                <i class="fas fa-mobile-alt feature-icon"></i>
-                <h3>Responsive Design</h3>
-                <p>Perfect display on all devices and screen sizes.</p>
-            </div>
-            <div class="feature-card">
-                <i class="fas fa-lock feature-icon"></i>
-                <h3>Secure</h3>
-                <p>Your data is protected with enterprise-grade security.</p>
-            </div>
-        </div>
-    </section>
-
-    <section class="contact" id="contact">
-        <div class="contact-form">
-            <h2>Contact Us</h2>
-            <form id="contactForm">
-                <div class="form-group">
-                    <input type="text" placeholder="Your Name" required>
-                </div>
-                <div class="form-group">
-                    <input type="email" placeholder="Your Email" required>
-                </div>
-                <div class="form-group">
-                    <textarea placeholder="Your Message" required></textarea>
-                </div>
-                <button type="submit" class="cta-button">Send Message</button>
-            </form>
-        </div>
-    </section>
-
-    <footer>
-        <div class="social-links">
-            <a href="#"><i class="fab fa-facebook"></i></a>
-            <a href="#"><i class="fab fa-twitter"></i></a>
-            <a href="#"><i class="fab fa-instagram"></i></a>
-            <a href="#"><i class="fab fa-linkedin"></i></a>
-        </div>
-        <p>&copy; 2023 Your Company. All rights reserved.</p>
-    </footer>
-
-    <div class="scroll-top" onclick="scrollToTop()">
-        <i class="fas fa-arrow-up"></i>
-    </div>
-
     <script>
-        // Mobile Menu Toggle
-        document.querySelector('.menu-toggle').addEventListener('click', () => {
-            document.querySelector('.nav-links').classList.toggle('active');
-        });
+        document.addEventListener("DOMContentLoaded", function() {
+            const words = ["Positive", "Neutral", "Negative", "Happy", "Sad", "Excited", "Angry"];
 
-        // Smooth Scroll
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
-            });
-        });
+            // Floating words effect
+            const floatingWordsContainer = document.createElement("div");
+            floatingWordsContainer.classList.add("floating-words");
+            document.body.appendChild(floatingWordsContainer);
 
-        // Form Validation
-        document.getElementById('contactForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const inputs = this.querySelectorAll('input, textarea');
-            let isValid = true;
+            function createFloatingWord() {
+                const wordElement = document.createElement("span");
+                wordElement.innerText = words[Math.floor(Math.random() * words.length)];
+                wordElement.style.left = Math.random() * 100 + "vw";
+                wordElement.style.animationDuration = (Math.random() * 5 + 5) + "s"; 
+                floatingWordsContainer.appendChild(wordElement);
 
-            inputs.forEach(input => {
-                if (!input.checkValidity()) {
-                    isValid = false;
-                    input.classList.add('invalid');
-                } else {
-                    input.classList.remove('invalid');
-                }
-            });
-
-            if (isValid) {
-                alert('Thank you for your message! We will respond shortly.');
-                this.reset();
+                // Remove word after animation
+                setTimeout(() => wordElement.remove(), 8000);
             }
-        });
-
-        // Scroll to Top Button
-        window.addEventListener('scroll', () => {
-            const scrollTop = document.querySelector('.scroll-top');
-            if (window.scrollY > 500) {
-                scrollTop.style.display = 'block';
-            } else {
-                scrollTop.style.display = 'none';
-            }
-        });
-
-        function scrollToTop() {
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
-        }
-
-        // Active Navigation Link
-        window.addEventListener('scroll', () => {
-            const sections = document.querySelectorAll('section');
-            const navLinks = document.querySelectorAll('.nav-links a');
-
-            sections.forEach(section => {
-                const sectionTop = section.offsetTop;
-                const sectionHeight = section.clientHeight;
-                if (window.scrollY >= sectionTop - sectionHeight / 3) {
-                    const id = section.getAttribute('id');
-                    navLinks.forEach(link => {
-                        link.classList.remove('active');
-                        if (link.getAttribute('href') === `#${id}`) {
-                            link.classList.add('active');
-                        }
-                    });
-                }
-            });
-        });
-
-        // Close mobile menu when clicking outside
-        document.addEventListener('click', (e) => {
-            if (!e.target.closest('nav') && !e.target.classList.contains('menu-toggle')) {
-                document.querySelector('.nav-links').classList.remove('active');
-            }
+            setInterval(createFloatingWord, 1000);
         });
     </script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1 class="animated-title">Twitter Sentiment Analysis</h1>
+            <p class="fade-in">Analyze Twitter sentiment in real time with AI-driven insights.</p>
+        </header>
+        <button class="predict-btn" onclick="window.location.href='/predict'">Predict Sentiment</button>
+    </div>
 </body>
 </html>
